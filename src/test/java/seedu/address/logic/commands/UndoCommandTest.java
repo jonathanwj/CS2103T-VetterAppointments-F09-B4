@@ -32,7 +32,7 @@ public class UndoCommandTest {
         deleteCommandOne.setData(model, EMPTY_COMMAND_HISTORY, EMPTY_STACK);
         deleteCommandTwo.setData(model, EMPTY_COMMAND_HISTORY, EMPTY_STACK);
     }
-
+    //lol
     @Test
     public void execute() throws Exception {
         UndoRedoStack undoRedoStack = prepareStack(
