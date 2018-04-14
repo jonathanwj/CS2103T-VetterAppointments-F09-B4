@@ -822,7 +822,7 @@ Aggregation also helps to reduce class coupling.
 // end::scheduleappt[]
 
 // tag::entitymodel[]
-=== Client,vet technician, pet, appointment entity
+=== Client, vet technician, pet, appointment entity
 
 ==== Reasons for implementation
 
