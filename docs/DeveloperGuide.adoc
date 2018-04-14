@@ -821,6 +821,79 @@ Aggregation also helps to reduce class coupling.
 ** Cons: The lack of the knowledge about implementation make the debugging hardr. In addition, you may need to create extra methods in order to perform certain functions that are not defined in the class.
 // end::scheduleappt[]
 
+// tag::personrole[]
+=== Client and vet technician role
+
+==== Reasons for implementation
+
+VetterAppointments requires to manage clients and vet technicians in the application. The implementation will allow the application to differentiate the different persons in VetterAppointments with two different types of roles specifically the client and vet technician.
+
+==== Current implementation todo
+
+The two different types of roles in VetterAppointments
+
+.AutoComplete Implementation Class Diagram
+image::LogicAutoCompleteClassDiagram.png[width="800", caption="Figure 4-17. "]
+
+The `CommandBox` will interact with the AutoCompleteManager from using the `LogicManager`.
+When the user presses tab in the command box area, the `CommandBox` will handle the tab key press and executes the `autoCompleteUserInput()` method.
+
+[source,java]
+----
+public class CommandBox extends UiPart<Region> {
+
+    private void handleKeyPress(KeyEvent keyEvent) {
+        switch (keyEvent.getCode()) {
+        // ... other cases ...
+        case TAB:
+            keyEvent.consume();
+            autoCompleteUserInput();
+            break;
+        default:
+            // let JavaFx handle the keypress
+        }
+    }
+
+    /* Shows auto completed text or suggestions on the UI */
+    private void autoCompleteUserInput() {
+        // ... auto complete logic ...
+
+        if (isTabDoubleTap()) {
+            // ... show suggestion on UI logic ...
+        }
+    }
+
+}
+----
+
+The `isTabDoubleTap()` method will check if the user presses tab twice in quick succession. If true, the `CommandBox` will show a list of command suggestions for the current user input.
+
+Figure 4-17 shows the sequence diagram of how the autocomplete operation works.
+
+.AutoComplete Sequence Diagram
+image::AutoCompleteSequenceDiagram.png[width="800", caption="Figure 4-17. "]
+
+==== Design considerations
+
+===== Aspect: Implementation of autocomplete capability
+
+* **Alternative 1 (current choice):** Add a manager class to handle all autocomplete behaviour
+** Pros: The class will allow for more code abstraction and can also be implemented elsewhere.
+** Cons: New developers will need to throughly understand the class interactions.
+* **Alternative 2:** Add the autocomplete logic simply in the `Commandbox`
+** Pros: Other classes are not involved, making it easier for new developers to understand.
+** Cons: It breaks the Single Responsibility Principle.
+
+===== Aspect: Implementation of algorithm
+
+* **Alternative 1 (current choice):** Use a Trie data structure
+** Pros: Software performance will be better.
+** Cons: It is difficult to implement.
+* **Alternative 2:** Iterate through all possible commands to find match prefix
+** Pros: It is easier to implement.
+** Cons: It may result in performance loss if there are too many commands.
+// end::autocomplete[]
+
 // tag::autocomplete[]
 === Autocomplete feature
 
@@ -873,6 +946,10 @@ public class CommandBox extends UiPart<Region> {
 
 The `isTabDoubleTap()` method will check if the user presses tab twice in quick succession. If true, the `CommandBox` will show a list of command suggestions for the current user input.
 
+Figure 4-17 shows the sequence diagram of how the autocomplete operation works.
+
+.AutoComplete Sequence Diagram
+image::AutoCompleteSequenceDiagram.png[width="800", caption="Figure 4-17. "]
 
 ==== Design considerations
 
